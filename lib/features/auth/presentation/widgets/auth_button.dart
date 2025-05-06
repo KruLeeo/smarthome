@@ -20,11 +20,11 @@ class AuthButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         fixedSize: const Size(395, 55),
         side: BorderSide(
-          color: Palete.primaryOrange.withOpacity(0.4),
+          color: Palete.primary.withOpacity(0.4),
           width: 2,
         ),
         backgroundColor: Colors.transparent,
-        foregroundColor: Palete.primaryOrange,
+        foregroundColor: Palete.primary,
       ),
     );
 

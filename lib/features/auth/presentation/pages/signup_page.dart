@@ -8,7 +8,7 @@ import 'package:testik2/features/auth/presentation/widgets/auth_field.dart';
 
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/theme/colors.dart';
-import '../../../../screens/home_page.dart';
+import '../../../../screens/dashboard_page.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 
@@ -41,14 +41,14 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Scaffold(
         body: Stack(
           children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/sign.png'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            // Container(
+            //   decoration: const BoxDecoration(
+            //     image: DecorationImage(
+            //       image: AssetImage('assets/images/sign.png'),
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: BlocConsumer<AuthBloc, AuthState>(
@@ -58,7 +58,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   } else if (state is AuthSuccess) {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      HomePage.route(),
+                      DashboardPage.route(),
                           (route) => false,
                     );
                   }
@@ -76,7 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         const Text(
                           'Sign Up',
                           style: TextStyle(
-                              color: Palete.whiteColor,
+                              color: Palete.lightText,
                               fontSize: 50,
                               fontWeight: FontWeight.bold),
                         ),
@@ -118,7 +118,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         .textTheme
                                         .titleMedium
                                         ?.copyWith(
-                                        color: Palete.primaryOrange,
+                                        color: Palete.primary,
                                         fontWeight: FontWeight.bold),
                                   )
                                 ]),

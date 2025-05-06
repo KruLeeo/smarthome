@@ -9,7 +9,7 @@ import 'package:testik2/features/auth/presentation/widgets/auth_field.dart';
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/utils/show_snackbar.dart';
-import '../../../../screens/home_page.dart';
+import '../../../../screens/dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -37,14 +37,14 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         body: Stack(
           children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/sign.png'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            // Container(
+            //   decoration: const BoxDecoration(
+            //     image: DecorationImage(
+            //       image: AssetImage('assets/images/sign.png'),
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: BlocConsumer<AuthBloc, AuthState>(
@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                   } else if (state is AuthSuccess) { // Должно быть AuthSuccess
                     Navigator.pushAndRemoveUntil(
                       context,
-                      HomePage.route(),
+                      DashboardPage.route(),
                           (route) => false,
                     );
                   }
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                         const Text(
                           'Sign In',
                           style: TextStyle(
-                            color: Palete.whiteColor,
+                            color: Palete.lightText,
                             fontSize: 50,
                             fontWeight: FontWeight.bold,
                           ),
@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                                       .textTheme
                                       .titleMedium
                                       ?.copyWith(
-                                    color: Palete.primaryOrange,
+                                    color: Palete.primary,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

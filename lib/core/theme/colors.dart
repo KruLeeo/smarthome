@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-class Palete{
-  static const Color primaryOrange = Color(0xffFD7C20);
-  static const Color background = Color.fromRGBO(24, 24, 32, 1);
-  static const Color whiteColor = Color(0xffffffff);
-  static const Color blackColor = Color(0xff000000);
-  static const Color greyColor = Color(0xff5A5959);
-  
+class Palete {
+  static const Color primary = Color(0xFF00C853);
+  static const Color secondary = Color(0xFF6200EE);
+  static const Color darkBackground = Color(0xFF121212);
+  static const Color darkSurface = Color(0xFF1E1E1E);
+  static const Color lightText = Color(0xFFE0E0E0);
+  static const Color error = Color(0xFFB00020);
 }

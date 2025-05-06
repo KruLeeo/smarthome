@@ -1,25 +1,39 @@
+
 import 'package:flutter/material.dart';
-import 'package:testik2/core/theme/colors.dart';
 
-class AppTheme{
+import 'colors.dart';
 
-  static _border ([Color color = Palete.greyColor]) => OutlineInputBorder(
-    borderSide: BorderSide(
-      color: color,
-      width: 2,
+class AppTheme {
+  static final ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primaryColor: Palete.primary,
+    scaffoldBackgroundColor: Palete.darkBackground,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Palete.darkSurface,
+      elevation: 0,
+      centerTitle: true,
+      iconTheme: IconThemeData(color: Colors.white),
     ),
-    borderRadius: BorderRadius.circular(15),
-  );
-
-  static final darkThemeMode = ThemeData.dark().copyWith(
-    scaffoldBackgroundColor: Palete.background,
-    appBarTheme: AppBarTheme(
-      backgroundColor: Palete.background,
+    cardTheme: CardTheme(
+      color: Palete.darkSurface,
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      contentPadding: const EdgeInsets.all(20),
-      enabledBorder: _border(),
-      focusedBorder: _border(Palete.primaryOrange),
-    )
+    buttonTheme: ButtonThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      buttonColor: Palete.primary,
+    ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: Palete.primary,
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Palete.darkSurface,
+      selectedItemColor: Palete.primary,
+      unselectedItemColor: Palete.lightText,
+    ),
   );
 }

@@ -35,15 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   google_fonts: ^6.1.0
-  image_picker: ^0.8.7+3
   provider: ^6.1.2
-  crop_image: ^1.0.16
-  screenshot: ^3.0.0
-  colorfilter_generator: ^0.0.8
-  flutter_colorpicker: ^1.1.0
-  lindi_sticker_widget: ^1.0.3
-  text_editor: ^0.7.0
-
   flutter_bloc: ^9.1.0
   fpdart: ^1.1.1
   supabase_flutter: ^2.8.4
