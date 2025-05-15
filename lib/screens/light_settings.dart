@@ -31,8 +31,16 @@ class _LightSettingsState extends State<LightSettings> {
     return Color(int.parse("0xFF$hexColor"));
   }
 
+  // Функция для затемнения цвета лампочки
+  Color _getBulbColor() {
+    final hsl = HSLColor.fromColor(_selectedColor);
+    return hsl.withLightness(hsl.lightness * 0.7).toColor();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bulbColor = _isOn ? _getBulbColor() : Colors.grey[400];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -62,9 +70,7 @@ class _LightSettingsState extends State<LightSettings> {
                   Icon(
                     Icons.lightbulb,
                     size: 60,
-                    color: _isOn
-                        ? _selectedColor.withOpacity(0.9)
-                        : Colors.grey[400],
+                    color: bulbColor,
                   ),
                 ],
               ),
@@ -84,8 +90,10 @@ class _LightSettingsState extends State<LightSettings> {
 
         // Power switch
         SwitchListTile(
-          title: const Text('Состояние', style: TextStyle(fontSize: 16)),
-          subtitle: Text(_isOn ? 'Включено' : 'Выключено'),
+          title: const Text('Состояние',
+              style: TextStyle(fontSize: 16, color: Colors.black)),
+          subtitle: Text(_isOn ? 'Включено' : 'Выключено',
+              style: TextStyle(color: Colors.black87)),
           value: _isOn,
           activeColor: Palete.primary,
           secondary: Icon(
@@ -105,11 +113,12 @@ class _LightSettingsState extends State<LightSettings> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Яркость', style: TextStyle(fontSize: 16)),
+              const Text('Яркость',
+                  style: TextStyle(fontSize: 16, color: Colors.black)),
               const SizedBox(height: 10),
               Row(
                 children: [
-                  Icon(Icons.brightness_low, color: Colors.grey[600]),
+                  Icon(Icons.brightness_low, color: Colors.black87),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Slider(
@@ -126,7 +135,7 @@ class _LightSettingsState extends State<LightSettings> {
                       inactiveColor: Colors.grey[300],
                     ),
                   ),
-                  Icon(Icons.brightness_high, color: Colors.grey[600]),
+                  Icon(Icons.brightness_high, color: Colors.black87),
                 ],
               ),
             ],
@@ -140,7 +149,8 @@ class _LightSettingsState extends State<LightSettings> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Цвет света', style: TextStyle(fontSize: 16)),
+              const Text('Цвет света',
+                  style: TextStyle(fontSize: 16, color: Colors.black)),
               const SizedBox(height: 10),
               Wrap(
                 spacing: 12,

@@ -110,14 +110,13 @@ class _LoginPageState extends State<LoginPage> {
                           child: RichText(
                             text: TextSpan(
                               text: "Don't have an account? ",
-                              style: Theme.of(context).textTheme.titleMedium,
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: Colors.black,  // Переопределяем только цвет
+                              ),
                               children: [
                                 TextSpan(
                                   text: 'Sign up',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(
+                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                     color: Palete.primary,
                                     fontWeight: FontWeight.bold,
                                   ),

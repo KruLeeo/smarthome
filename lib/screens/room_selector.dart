@@ -32,12 +32,20 @@ class RoomSelector extends StatelessWidget {
                         FilterByRoom(selected ? rooms[index] : null),
                       );
                     },
-                    selectedColor: Palete.primary,
-                    checkmarkColor: Colors.white,
+                    backgroundColor: Colors.white, // Белый фон невыбранного чипа
+                    selectedColor: Palete.primary, // Цвет выбранного чипа
+                    checkmarkColor: Colors.white, // Цвет галочки
                     labelStyle: TextStyle(
                       color: state.selectedRoom == rooms[index]
-                          ? Colors.white
-                          : Palete.lightText,
+                          ? Colors.white // Белый текст для выбранного чипа
+                          : Colors.black, // Черный текст для невыбранного
+                    ),
+                    shape: StadiumBorder(
+                      side: BorderSide(
+                        color: state.selectedRoom == rooms[index]
+                            ? Palete.primary // Граница совпадает с фоном при выборе
+                            : Colors.grey.shade300, // Серая граница невыбранного
+                      ),
                     ),
                   ),
                 );

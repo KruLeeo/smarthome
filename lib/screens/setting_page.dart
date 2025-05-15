@@ -20,7 +20,12 @@ class DeviceSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${device.name} Settings'),
+        title: Text(
+          '${device.name} Settings',
+          style: TextStyle(color: Colors.black), // Чёрный цвет текста
+        ),
+        backgroundColor: Colors.white, // Белый фон для контраста
+        iconTheme: IconThemeData(color: Colors.black), // Чёрные иконки (например, кнопка "назад")
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

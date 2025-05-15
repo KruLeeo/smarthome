@@ -34,8 +34,16 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Palete.darkSurface,
+            color: Colors.white, // Белый фон
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade300), // Серая граница
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
           ),
           child: Column(
             children: [
@@ -74,7 +82,9 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
                         style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
-                          color: _isOn ? Colors.white : Colors.grey,
+                          color: _isOn
+                              ? (_mode == 'heat' ? Colors.orange : Colors.blue)
+                              : Colors.grey,
                         ),
                       ),
                       Text(
@@ -93,8 +103,10 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
 
               // Power switch
               SwitchListTile(
-                title: const Text('Состояние', style: TextStyle(fontSize: 16)),
-                subtitle: Text(_isOn ? 'Включен' : 'Выключен'),
+                title: const Text('Состояние',
+                    style: TextStyle(fontSize: 16, color: Colors.black)),
+                subtitle: Text(_isOn ? 'Включен' : 'Выключен',
+                    style: TextStyle(color: Colors.black87)),
                 value: _isOn,
                 activeColor: Palete.primary,
                 secondary: Icon(
@@ -112,13 +124,22 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Palete.darkSurface,
+            color: Colors.white, // Белый фон
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade300),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Режим работы', style: TextStyle(fontSize: 16)),
+              const Text('Режим работы',
+                  style: TextStyle(fontSize: 16, color: Colors.black)),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -148,13 +169,22 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Palete.darkSurface,
+            color: Colors.white, // Белый фон
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade300),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Температура', style: TextStyle(fontSize: 16)),
+              const Text('Температура',
+                  style: TextStyle(fontSize: 16, color: Colors.black)),
               const SizedBox(height: 10),
               SliderTheme(
                 data: SliderTheme.of(context).copyWith(
@@ -180,8 +210,8 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('10°C', style: TextStyle(color: Colors.grey[600])),
-                  Text('30°C', style: TextStyle(color: Colors.grey[600])),
+                  Text('10°C', style: TextStyle(color: Colors.grey[800])),
+                  Text('30°C', style: TextStyle(color: Colors.grey[800])),
                 ],
               ),
             ],
@@ -294,12 +324,12 @@ class _ModeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: isActive ? color.withOpacity(0.2) : Colors.transparent,
-        foregroundColor: isActive ? color : Colors.grey,
+        backgroundColor: Colors.white,
+        foregroundColor: isActive ? color : Colors.black87,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
           side: BorderSide(
-            color: isActive ? color : Colors.grey.withOpacity(0.5),
+            color: isActive ? color : Colors.grey.shade400,
             width: 1,
           ),
         ),
@@ -311,7 +341,7 @@ class _ModeButton extends StatelessWidget {
         children: [
           Icon(icon, size: 20),
           const SizedBox(width: 8),
-          Text(label),
+          Text(label, style: TextStyle(color: isActive ? color : Colors.black87)),
         ],
       ),
     );
@@ -338,9 +368,9 @@ class _QuickTempButton extends StatelessWidget {
         backgroundColor: isActive
             ? Palete.primary.withOpacity(0.1)
             : Colors.transparent,
-        foregroundColor: isActive ? Palete.primary : Colors.grey,
+        foregroundColor: isActive ? Palete.primary : Colors.black87,
         side: BorderSide(
-          color: isActive ? Palete.primary : Colors.grey.withOpacity(0.3),
+          color: isActive ? Palete.primary : Colors.grey.shade400,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -352,11 +382,17 @@ class _QuickTempButton extends StatelessWidget {
         children: [
           Text(
             '$temperature°C',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: isActive ? Palete.primary : Colors.black87,
+            ),
           ),
           Text(
             label,
-            style: const TextStyle(fontSize: 12),
+            style: TextStyle(
+              fontSize: 12,
+              color: isActive ? Palete.primary : Colors.black87,
+            ),
           ),
         ],
       ),

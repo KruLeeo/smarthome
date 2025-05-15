@@ -29,6 +29,7 @@ class _PlugSettingsState extends State<PlugSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // Белый фон всей страницы
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -38,8 +39,16 @@ class _PlugSettingsState extends State<PlugSettings> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Palete.darkSurface,
+                  color: Colors.white, // Белый фон контейнера
                   borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.grey.shade300), // Серая граница
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                    ),
+                  ],
                 ),
                 child: Column(
                   children: [
@@ -96,8 +105,12 @@ class _PlugSettingsState extends State<PlugSettings> {
 
                     // Power switch
                     SwitchListTile(
-                      title: const Text('Состояние', style: TextStyle(fontSize: 16)),
-                      subtitle: Text(_isOn ? 'Розетка включена' : 'Розетка выключена'),
+                      title: const Text('Состояние',
+                          style: TextStyle(fontSize: 16, color: Colors.black)),
+                      subtitle: Text(
+                        _isOn ? 'Розетка включена' : 'Розетка выключена',
+                        style: TextStyle(color: Colors.black87),
+                      ),
                       value: _isOn,
                       activeColor: Palete.primary,
                       secondary: Icon(
@@ -115,16 +128,25 @@ class _PlugSettingsState extends State<PlugSettings> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Palete.darkSurface,
+                  color: Colors.white, // Белый фон
                   borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.grey.shade300),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SwitchListTile(
                       title: const Text('Мониторинг энергии',
-                          style: TextStyle(fontSize: 16)),
-                      subtitle: const Text('Отслеживание потребления электроэнергии'),
+                          style: TextStyle(fontSize: 16, color: Colors.black)),
+                      subtitle: const Text('Отслеживание потребления электроэнергии',
+                          style: TextStyle(color: Colors.black87)),
                       value: _energyMonitoring,
                       activeColor: Palete.primary,
                       secondary: Icon(
@@ -149,13 +171,22 @@ class _PlugSettingsState extends State<PlugSettings> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Palete.darkSurface,
+                  color: Colors.white, // Белый фон
                   borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.grey.shade300),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Расписание', style: TextStyle(fontSize: 16)),
+                    const Text('Расписание',
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
                     const SizedBox(height: 10),
                     Wrap(
                       spacing: 8,
@@ -208,7 +239,7 @@ class _PlugSettingsState extends State<PlugSettings> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Palete.darkBackground,
+        color: Colors.grey.shade100, // Светло-серый фон
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -232,11 +263,12 @@ class _PlugSettingsState extends State<PlugSettings> {
     return Column(
       children: [
         Text(label,
-            style: TextStyle(color: Colors.grey[600]),
+            style: TextStyle(color: Colors.grey[800]), // Темно-серый текст
             textAlign: TextAlign.center),
         const SizedBox(height: 4),
         Text(value,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.black),
             textAlign: TextAlign.center),
       ],
     );
@@ -262,17 +294,17 @@ class _PlugSettingsState extends State<PlugSettings> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Кастомное расписание'),
+        title: const Text('Кастомное расписание', style: TextStyle(color: Colors.black)),
         content: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Настройте ваше расписание'),
+            Text('Настройте ваше расписание', style: TextStyle(color: Colors.black87)),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('ОТМЕНА'),
+            child: const Text('ОТМЕНА', style: TextStyle(color: Colors.black)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -283,7 +315,7 @@ class _PlugSettingsState extends State<PlugSettings> {
               _sendDeviceUpdate();
               Navigator.pop(context);
             },
-            child: const Text('СОХРАНИТЬ'),
+            child: const Text('СОХРАНИТЬ', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -328,14 +360,15 @@ class _ScheduleOption extends StatelessWidget {
       onSelected: (selected) => onPressed(),
       selectedColor: Palete.primary.withOpacity(0.2),
       labelStyle: TextStyle(
-        color: isActive ? Palete.primary : Colors.white,
+        color: isActive ? Palete.primary : Colors.black, // Черный текст для неактивных
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(
-          color: isActive ? Palete.primary : Colors.grey.withOpacity(0.5),
+          color: isActive ? Palete.primary : Colors.grey.shade400,
         ),
       ),
+      backgroundColor: Colors.white, // Белый фон чипа
     );
   }
 }

@@ -127,12 +127,12 @@ class DeviceCard extends StatelessWidget {
             ),
             if (!device.isOn)
               Padding(
-                padding: const EdgeInsets.only(top: 4),
+                padding: const EdgeInsets.only(top: 0),
                 child: Text(
                   'Включите устройство для настройки',
                   style: TextStyle(
                     color: Palete.lightText.withOpacity(0.5),
-                    fontSize: 10,
+                    fontSize: 8.2,
                   ),
                 ),
               ),

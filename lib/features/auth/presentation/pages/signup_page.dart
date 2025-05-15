@@ -110,18 +110,21 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: RichText(
                             text: TextSpan(
                                 text: "Already have an account? ",
-                                style: Theme.of(context).textTheme.titleMedium,
+                                style: TextStyle(
+                                  color: Colors.black, // Черный цвет основного текста
+                                  fontSize: 16, // Размер шрифта (можно настроить)
+                                ),
                                 children: [
                                   TextSpan(
                                     text: 'Sign in',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                        color: Palete.primary,
-                                        fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                      color: Palete.primary, // Зеленый цвет для "Sign in"
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16, // Согласованный размер шрифта
+                                    ),
                                   )
-                                ]),
+                                ]
+                            ),
                           ),
                         )
                       ],

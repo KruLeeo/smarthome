@@ -10,7 +10,6 @@ import '../core/theme/app_icons.dart';
 import '../core/theme/colors.dart';
 import '../features/auth/presentation/bloc/auth_bloc.dart';
 import '../features/auth/presentation/bloc/auth_event.dart';
-import '../features/device/device.dart';
 import '../features/device/device_card.dart';
 import '../features/device/devices_page.dart';
 import 'home_controll_bloc.dart';
@@ -36,10 +35,15 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       backgroundColor: Palete.darkBackground,
       appBar: AppBar(
-        title: const Text('Smart Home'),
+        title: const Text(
+          'Smart Home',
+          style: TextStyle(color: Colors.black), // Черный цвет текста
+        ),
+        backgroundColor: Colors.white, // Белый фон AppBar для контраста
+        iconTheme: IconThemeData(color: Colors.black), // Черные иконки (например, кнопка назад)
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout, color: Colors.black), // Черная иконка выхода
             onPressed: () {
               context.read<AuthBloc>().add(AuthLogout());
               Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
@@ -90,9 +94,9 @@ class _DashboardPageState extends State<DashboardPage> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Palete.darkSurface,
-        selectedItemColor: Palete.primary,
-        unselectedItemColor: Palete.lightText,
+        backgroundColor: Palete.darkBackground, // Белый фон
+        selectedItemColor: Palete.primary, // Цвет выбранной иконки (зеленый)
+        unselectedItemColor: Colors.black, // Черный цвет для невыбранных иконок
         currentIndex: 0,
         items: const [
           BottomNavigationBarItem(icon: Icon(AppIcons.home), label: 'Home'),
@@ -100,19 +104,19 @@ class _DashboardPageState extends State<DashboardPage> {
           BottomNavigationBarItem(icon: Icon(AppIcons.scenes), label: 'Scenes'),
           BottomNavigationBarItem(icon: Icon(AppIcons.settings), label: 'Settings'),
         ],
-          onTap: (index) {
-            switch (index) {
-              case 1:
-                Navigator.push(context, DevicesPage.route());
-                break;
-              case 2:
-                Navigator.push(context, ScenesPage.route());
-                break;
-              case 3:
-                Navigator.push(context, SettingsPage.route());
-                break;
-            }
+        onTap: (index) {
+          switch (index) {
+            case 1:
+              Navigator.push(context, DevicesPage.route());
+              break;
+            case 2:
+              Navigator.push(context, ScenesPage.route());
+              break;
+            case 3:
+              Navigator.push(context, SettingsPage.route());
+              break;
           }
+        },
       ),
     );
   }

@@ -36,8 +36,9 @@ class _CameraSettingsState extends State<CameraSettings> {
         Container(
           height: 200,
           decoration: BoxDecoration(
-            color: Colors.black,
+            color: Colors.grey.shade200,
             borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
             image: _isOn
                 ? const DecorationImage(
               image: NetworkImage('https://example.com/camera-feed.jpg'),
@@ -52,11 +53,11 @@ class _CameraSettingsState extends State<CameraSettings> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.videocam_off, size: 50, color: Colors.grey),
+                      Icon(Icons.videocam_off, size: 50, color: Colors.grey.shade600),
                       const SizedBox(height: 8),
                       Text(
                         'Камера выключена',
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: Colors.grey.shade800),
                       ),
                     ],
                   ),
@@ -93,8 +94,16 @@ class _CameraSettingsState extends State<CameraSettings> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Palete.darkSurface,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade300),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
           ),
           child: Column(
             children: [
@@ -155,7 +164,7 @@ class _CameraSettingsState extends State<CameraSettings> {
               child: Text(
                 'Включите камеру для доступа к настройкам',
                 style: TextStyle(
-                  color: Colors.grey,
+                  color: Colors.grey.shade600,
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
                 ),
@@ -175,18 +184,18 @@ class _CameraSettingsState extends State<CameraSettings> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Palete.darkBackground,
+        color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          Icon(icon, color: onChanged != null ? Palete.primary : Colors.grey),
+          Icon(icon, color: onChanged != null ? Palete.primary : Colors.grey.shade600),
           const SizedBox(width: 16),
           Expanded(
             child: Text(
               title,
               style: TextStyle(
-                color: onChanged != null ? Colors.white : Colors.grey,
+                color: onChanged != null ? Colors.black : Colors.grey.shade600,
               ),
             ),
           ),

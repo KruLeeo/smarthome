@@ -18,11 +18,15 @@ class DevicesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Devices'),
-        backgroundColor: Palete.darkSurface,
+        title: const Text(
+          'Devices',
+          style: TextStyle(color: Colors.black), // Черный цвет текста
+        ),
+        backgroundColor: Palete.darkSurface, // Фон остается как был
+        iconTheme: IconThemeData(color: Colors.black), // Черные иконки (стрелка назад и др.)
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh, color: Colors.black), // Явно черная иконка
             onPressed: () => context.read<DevicesBloc>().add(LoadDevicesEvent()),
           ),
         ],
@@ -50,8 +54,8 @@ class DevicesPage extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Palete.darkSurface,
-          title: const Text('Add New Device', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.white,
+          title: const Text('Add New Device', style: TextStyle(color: Colors.black)),
           content: Form(
             key: formKey,
             child: SizedBox(
@@ -62,9 +66,15 @@ class DevicesPage extends StatelessWidget {
                   TextFormField(
                     decoration: const InputDecoration(
                       labelText: 'Device Name',
-                      labelStyle: TextStyle(color: Palete.lightText),
+                      labelStyle: TextStyle(color: Colors.black54),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black12),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Palete.primary),
+                      ),
                     ),
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.black),
                     validator: (value) =>
                     value?.isEmpty ?? true ? 'Name is required' : null,
                     onChanged: (value) => deviceName = value,
@@ -72,15 +82,21 @@ class DevicesPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     value: selectedRoom,
-                    dropdownColor: Palete.darkSurface,
+                    dropdownColor: Colors.white,
                     decoration: const InputDecoration(
                       labelText: 'Room',
-                      labelStyle: TextStyle(color: Palete.lightText),
+                      labelStyle: TextStyle(color: Colors.black54),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black12),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Palete.primary),
+                      ),
                     ),
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.black),
                     items: rooms.map((room) => DropdownMenuItem(
                       value: room,
-                      child: Text(room),
+                      child: Text(room, style: const TextStyle(color: Colors.black)),
                     )).toList(),
                     onChanged: (value) => selectedRoom = value!,
                     validator: (value) =>
@@ -89,17 +105,23 @@ class DevicesPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   DropdownButtonFormField<DeviceType>(
                     value: selectedType,
-                    dropdownColor: Palete.darkSurface,
+                    dropdownColor: Colors.white,
                     decoration: const InputDecoration(
                       labelText: 'Device Type',
-                      labelStyle: TextStyle(color: Palete.lightText),
+                      labelStyle: TextStyle(color: Colors.black54),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black12),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Palete.primary),
+                      ),
                     ),
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.black),
                     items: deviceTypes.map((type) => DropdownMenuItem(
                       value: type,
                       child: Text(
                         type.toString().split('.').last,
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.black),
                       ),
                     )).toList(),
                     onChanged: (value) => selectedType = value!,
@@ -113,10 +135,13 @@ class DevicesPage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: Navigator.of(context).pop,
-              child: const Text('Cancel', style: TextStyle(color: Palete.lightText)),
+              child: const Text('Cancel', style: TextStyle(color: Colors.black54)),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Palete.primary),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Palete.primary, // Or your light theme primary color
+                foregroundColor: Colors.white,
+              ),
               onPressed: () {
                 if (formKey.currentState?.validate() ?? false) {
                   final newDevice = Device(
@@ -208,8 +233,8 @@ class _DeviceList extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const Icon(Icons.settings, color: Colors.white),
-                title: const Text('Settings', style: TextStyle(color: Colors.white)),
+                leading: const Icon(Icons.settings, color: Colors.black54),
+                title: const Text('Settings', style: TextStyle(color: Colors.black)),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(
@@ -219,8 +244,8 @@ class _DeviceList extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.edit, color: Colors.white),
-                title: const Text('Edit', style: TextStyle(color: Colors.white)),
+                leading: const Icon(Icons.edit, color: Colors.black54),
+                title: const Text('Edit', style: TextStyle(color: Colors.black)),
                 onTap: () {
                   Navigator.pop(context);
                   _showEditDeviceDialog(context, device);

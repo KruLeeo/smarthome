@@ -23,7 +23,7 @@ class AuthButton extends StatelessWidget {
           color: Palete.primary.withOpacity(0.4),
           width: 2,
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: Palete.darkBackground,
         foregroundColor: Palete.primary,
       ),
     );
