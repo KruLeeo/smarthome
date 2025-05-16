@@ -17,16 +17,22 @@ class SettingsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+    final iconColor = isDarkTheme ? Palete.primary : Palete.primary; // Можно использовать разные цвета для тем
+
     return ListTile(
-      leading: Icon(icon, color: Palete.primary),
+      leading: Icon(icon, color: iconColor),
       title: Text(
         title,
-        style: const TextStyle(color: Palete.lightText),
+        style: TextStyle(color: textColor),
       ),
-      trailing: const Icon(Icons.chevron_right, color: Palete.lightText),
+      trailing: Icon(Icons.chevron_right, color: textColor),
       onTap: onTap ?? () {
         Navigator.pushNamed(context, route);
       },
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+      minLeadingWidth: 24,
     );
   }
 }

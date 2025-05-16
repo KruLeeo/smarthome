@@ -1,6 +1,6 @@
-// dashboard_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:testik2/screens/room_selector.dart';
 import 'package:testik2/features/scenes/scenes_page.dart';
 import 'package:testik2/screens/setting_page.dart';
@@ -8,6 +8,7 @@ import 'package:testik2/screens/settings_page.dart';
 
 import '../core/theme/app_icons.dart';
 import '../core/theme/colors.dart';
+import '../core/theme/theme_provider.dart';
 import '../features/auth/presentation/bloc/auth_bloc.dart';
 import '../features/auth/presentation/bloc/auth_event.dart';
 import '../features/device/device_card.dart';
@@ -32,18 +33,35 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDarkTheme ? Palete.darkBackground : Palete.lightBackground;
+    final appBarColor = isDarkTheme ? Palete.darkSurface : Palete.lightSurface;
+    final iconColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+
     return Scaffold(
-      backgroundColor: Palete.darkBackground,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Smart Home',
-          style: TextStyle(color: Colors.black), // Черный цвет текста
+          style: TextStyle(color: textColor),
         ),
-        backgroundColor: Colors.white, // Белый фон AppBar для контраста
-        iconTheme: IconThemeData(color: Colors.black), // Черные иконки (например, кнопка назад)
+        backgroundColor: appBarColor,
+        iconTheme: IconThemeData(color: iconColor),
         actions: [
+          Consumer<ThemeProvider>(
+            builder: (context, themeProvider, child) {
+              return Switch(
+                value: themeProvider.isDarkMode,
+                onChanged: (value) {
+                  themeProvider.toggleTheme(value);
+                },
+                activeColor: Palete.primary,
+              );
+            },
+          ),
           IconButton(
-            icon: const Icon(Icons.logout, color: Colors.black), // Черная иконка выхода
+            icon: Icon(Icons.logout, color: iconColor),
             onPressed: () {
               context.read<AuthBloc>().add(AuthLogout());
               Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
@@ -54,11 +72,20 @@ class _DashboardPageState extends State<DashboardPage> {
       body: BlocBuilder<HomeControlBloc, HomeControlState>(
         builder: (context, state) {
           if (state is HomeControlLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(
+                color: Palete.primary,
+              ),
+            );
           }
 
           if (state is! HomeControlLoaded) {
-            return const Center(child: Text('Error loading devices'));
+            return Center(
+              child: Text(
+                'Error loading devices',
+                style: TextStyle(color: textColor),
+              ),
+            );
           }
 
           final devices = state.selectedRoom == null || state.selectedRoom == 'All Rooms'
@@ -94,15 +121,27 @@ class _DashboardPageState extends State<DashboardPage> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Palete.darkBackground, // Белый фон
-        selectedItemColor: Palete.primary, // Цвет выбранной иконки (зеленый)
-        unselectedItemColor: Colors.black, // Черный цвет для невыбранных иконок
+        backgroundColor: backgroundColor,
+        selectedItemColor: Palete.primary,
+        unselectedItemColor: isDarkTheme ? Palete.darkText.withOpacity(0.6) : Palete.lightText.withOpacity(0.6),
         currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(AppIcons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(AppIcons.devices), label: 'Devices'),
-          BottomNavigationBarItem(icon: Icon(AppIcons.scenes), label: 'Scenes'),
-          BottomNavigationBarItem(icon: Icon(AppIcons.settings), label: 'Settings'),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(AppIcons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(AppIcons.devices),
+            label: 'Devices',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(AppIcons.scenes),
+            label: 'Scenes',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(AppIcons.settings),
+            label: 'Settings',
+          ),
         ],
         onTap: (index) {
           switch (index) {

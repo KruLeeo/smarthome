@@ -28,18 +28,25 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDarkTheme ? Palete.darkBackground : Palete.lightBackground;
+    final surfaceColor = isDarkTheme ? Palete.darkSurface : Palete.lightSurface;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+    final disabledColor = isDarkTheme ? Colors.grey.shade600 : Colors.grey.shade400;
+    final borderColor = isDarkTheme ? Colors.grey.shade700 : Colors.grey.shade300;
+
     return Column(
       children: [
         // Header with thermostat visualization
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white, // Белый фон
+            color: surfaceColor,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.shade300), // Серая граница
+            border: Border.all(color: borderColor),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.black.withOpacity(isDarkTheme ? 0.2 : 0.1),
                 blurRadius: 10,
                 spreadRadius: 2,
               ),
@@ -61,7 +68,7 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
                             ? (_mode == 'heat'
                             ? Colors.orange.withOpacity(0.3)
                             : Colors.blue.withOpacity(0.3))
-                            : Colors.grey.withOpacity(0.3),
+                            : disabledColor.withOpacity(0.3),
                         width: 8,
                       ),
                     ),
@@ -74,7 +81,7 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
                         size: 40,
                         color: _isOn
                             ? (_mode == 'heat' ? Colors.orange : Colors.blue)
-                            : Colors.grey,
+                            : disabledColor,
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -84,7 +91,7 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
                           fontWeight: FontWeight.bold,
                           color: _isOn
                               ? (_mode == 'heat' ? Colors.orange : Colors.blue)
-                              : Colors.grey,
+                              : disabledColor,
                         ),
                       ),
                       Text(
@@ -92,7 +99,7 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
                         style: TextStyle(
                           color: _isOn
                               ? (_mode == 'heat' ? Colors.orange : Colors.blue)
-                              : Colors.grey,
+                              : disabledColor,
                         ),
                       ),
                     ],
@@ -103,15 +110,19 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
 
               // Power switch
               SwitchListTile(
-                title: const Text('Состояние',
-                    style: TextStyle(fontSize: 16, color: Colors.black)),
-                subtitle: Text(_isOn ? 'Включен' : 'Выключен',
-                    style: TextStyle(color: Colors.black87)),
+                title: Text(
+                  'Состояние',
+                  style: TextStyle(fontSize: 16, color: textColor),
+                ),
+                subtitle: Text(
+                  _isOn ? 'Включен' : 'Выключен',
+                  style: TextStyle(color: textColor.withOpacity(0.7)),
+                ),
                 value: _isOn,
                 activeColor: Palete.primary,
                 secondary: Icon(
                   _isOn ? Icons.power_settings_new : Icons.power_off,
-                  color: _isOn ? Palete.primary : Colors.grey,
+                  color: _isOn ? Palete.primary : disabledColor,
                 ),
                 onChanged: _toggleDeviceState,
               ),
@@ -124,12 +135,12 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white, // Белый фон
+            color: surfaceColor,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: borderColor),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.black.withOpacity(isDarkTheme ? 0.2 : 0.1),
                 blurRadius: 10,
                 spreadRadius: 2,
               ),
@@ -138,8 +149,10 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Режим работы',
-                  style: TextStyle(fontSize: 16, color: Colors.black)),
+              Text(
+                'Режим работы',
+                style: TextStyle(fontSize: 16, color: textColor),
+              ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -150,6 +163,9 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
                     isActive: _mode == 'heat',
                     onPressed: () => _changeMode('heat'),
                     color: Colors.orange,
+                    backgroundColor: surfaceColor,
+                    textColor: textColor,
+                    borderColor: borderColor,
                   ),
                   _ModeButton(
                     icon: Icons.ac_unit,
@@ -157,6 +173,9 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
                     isActive: _mode == 'cool',
                     onPressed: () => _changeMode('cool'),
                     color: Colors.blue,
+                    backgroundColor: surfaceColor,
+                    textColor: textColor,
+                    borderColor: borderColor,
                   ),
                 ],
               ),
@@ -169,12 +188,12 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white, // Белый фон
+            color: surfaceColor,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: borderColor),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.black.withOpacity(isDarkTheme ? 0.2 : 0.1),
                 blurRadius: 10,
                 spreadRadius: 2,
               ),
@@ -183,13 +202,15 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Температура',
-                  style: TextStyle(fontSize: 16, color: Colors.black)),
+              Text(
+                'Температура',
+                style: TextStyle(fontSize: 16, color: textColor),
+              ),
               const SizedBox(height: 10),
               SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: _mode == 'heat' ? Colors.orange : Colors.blue,
-                  inactiveTrackColor: Colors.grey[300],
+                  inactiveTrackColor: isDarkTheme ? Colors.grey.shade700 : Colors.grey.shade300,
                   thumbColor: _mode == 'heat' ? Colors.orange : Colors.blue,
                   overlayColor: _mode == 'heat'
                       ? Colors.orange.withOpacity(0.2)
@@ -210,8 +231,8 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('10°C', style: TextStyle(color: Colors.grey[800])),
-                  Text('30°C', style: TextStyle(color: Colors.grey[800])),
+                  Text('10°C', style: TextStyle(color: textColor.withOpacity(0.7))),
+                  Text('30°C', style: TextStyle(color: textColor.withOpacity(0.7))),
                 ],
               ),
             ],
@@ -229,6 +250,7 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
                   label: 'Прохладно',
                   onPressed: () => _setTemperature(18),
                   isActive: _temperature == 18,
+                  isDarkTheme: isDarkTheme,
                 ),
               ),
               const SizedBox(width: 10),
@@ -238,6 +260,7 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
                   label: 'Комфортно',
                   onPressed: () => _setTemperature(22),
                   isActive: _temperature == 22,
+                  isDarkTheme: isDarkTheme,
                 ),
               ),
               const SizedBox(width: 10),
@@ -247,6 +270,7 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
                   label: 'Тепло',
                   onPressed: () => _setTemperature(26),
                   isActive: _temperature == 26,
+                  isDarkTheme: isDarkTheme,
                 ),
               ),
             ],
@@ -260,7 +284,7 @@ class _ThermostatSettingsState extends State<ThermostatSettings> {
               child: Text(
                 'Включите термостат для регулировки',
                 style: TextStyle(
-                  color: Colors.grey[600],
+                  color: disabledColor,
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
                 ),
@@ -311,6 +335,9 @@ class _ModeButton extends StatelessWidget {
   final bool isActive;
   final VoidCallback onPressed;
   final Color color;
+  final Color backgroundColor;
+  final Color textColor;
+  final Color borderColor;
 
   const _ModeButton({
     required this.icon,
@@ -318,18 +345,21 @@ class _ModeButton extends StatelessWidget {
     required this.isActive,
     required this.onPressed,
     required this.color,
+    required this.backgroundColor,
+    required this.textColor,
+    required this.borderColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        foregroundColor: isActive ? color : Colors.black87,
+        backgroundColor: backgroundColor,
+        foregroundColor: isActive ? color : textColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
           side: BorderSide(
-            color: isActive ? color : Colors.grey.shade400,
+            color: isActive ? color : borderColor,
             width: 1,
           ),
         ),
@@ -341,7 +371,7 @@ class _ModeButton extends StatelessWidget {
         children: [
           Icon(icon, size: 20),
           const SizedBox(width: 8),
-          Text(label, style: TextStyle(color: isActive ? color : Colors.black87)),
+          Text(label, style: TextStyle(color: isActive ? color : textColor)),
         ],
       ),
     );
@@ -353,24 +383,28 @@ class _QuickTempButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
   final bool isActive;
+  final bool isDarkTheme;
 
   const _QuickTempButton({
     required this.temperature,
     required this.label,
     required this.onPressed,
     required this.isActive,
+    required this.isDarkTheme,
   });
 
   @override
   Widget build(BuildContext context) {
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         backgroundColor: isActive
             ? Palete.primary.withOpacity(0.1)
             : Colors.transparent,
-        foregroundColor: isActive ? Palete.primary : Colors.black87,
+        foregroundColor: isActive ? Palete.primary : textColor,
         side: BorderSide(
-          color: isActive ? Palete.primary : Colors.grey.shade400,
+          color: isActive ? Palete.primary : (isDarkTheme ? Colors.grey.shade600 : Colors.grey.shade400),
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -384,14 +418,14 @@ class _QuickTempButton extends StatelessWidget {
             '$temperature°C',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: isActive ? Palete.primary : Colors.black87,
+              color: isActive ? Palete.primary : textColor,
             ),
           ),
           Text(
             label,
             style: TextStyle(
               fontSize: 12,
-              color: isActive ? Palete.primary : Colors.black87,
+              color: isActive ? Palete.primary : textColor,
             ),
           ),
         ],

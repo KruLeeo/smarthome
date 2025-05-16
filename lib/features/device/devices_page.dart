@@ -1,4 +1,3 @@
-// features/device/devices_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testik2/core/theme/colors.dart';
@@ -16,32 +15,39 @@ class DevicesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDarkTheme ? Palete.darkBackground : Palete.lightBackground;
+    final surfaceColor = isDarkTheme ? Palete.darkSurface : Palete.lightSurface;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+    final iconColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Devices',
-          style: TextStyle(color: Colors.black), // Черный цвет текста
+          style: TextStyle(color: textColor),
         ),
-        backgroundColor: Palete.darkSurface, // Фон остается как был
-        iconTheme: IconThemeData(color: Colors.black), // Черные иконки (стрелка назад и др.)
+        backgroundColor: surfaceColor,
+        iconTheme: IconThemeData(color: iconColor),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.black), // Явно черная иконка
+            icon: Icon(Icons.refresh, color: iconColor),
             onPressed: () => context.read<DevicesBloc>().add(LoadDevicesEvent()),
           ),
         ],
       ),
-      backgroundColor: Palete.darkBackground,
+      backgroundColor: backgroundColor,
       body: const _DeviceList(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Palete.primary,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: isDarkTheme ? Palete.darkText : Colors.white),
         onPressed: () => _showAddDeviceDialog(context),
       ),
     );
   }
 
   static void _showAddDeviceDialog(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     final formKey = GlobalKey<FormState>();
     String deviceName = '';
     String selectedRoom = 'Living Room';
@@ -54,8 +60,11 @@ class DevicesPage extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.white,
-          title: const Text('Add New Device', style: TextStyle(color: Colors.black)),
+          backgroundColor: isDarkTheme ? Palete.darkSurface : Palete.lightSurface,
+          title: Text(
+              'Add New Device',
+              style: TextStyle(color: isDarkTheme ? Palete.darkText : Palete.lightText)
+          ),
           content: Form(
             key: formKey,
             child: SizedBox(
@@ -64,17 +73,21 @@ class DevicesPage extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Device Name',
-                      labelStyle: TextStyle(color: Colors.black54),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black12),
+                      labelStyle: TextStyle(
+                          color: isDarkTheme ? Palete.darkText.withOpacity(0.7) : Palete.lightText.withOpacity(0.7)
                       ),
-                      focusedBorder: UnderlineInputBorder(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: isDarkTheme ? Colors.white24 : Colors.black12
+                        ),
+                      ),
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Palete.primary),
                       ),
                     ),
-                    style: const TextStyle(color: Colors.black),
+                    style: TextStyle(color: isDarkTheme ? Palete.darkText : Palete.lightText),
                     validator: (value) =>
                     value?.isEmpty ?? true ? 'Name is required' : null,
                     onChanged: (value) => deviceName = value,
@@ -82,21 +95,20 @@ class DevicesPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     value: selectedRoom,
-                    dropdownColor: Colors.white,
-                    decoration: const InputDecoration(
+                    dropdownColor: isDarkTheme ? Palete.darkSurface : Palete.lightSurface,
+                    decoration: InputDecoration(
                       labelText: 'Room',
-                      labelStyle: TextStyle(color: Colors.black54),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black12),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Palete.primary),
+                      labelStyle: TextStyle(
+                          color: isDarkTheme ? Palete.darkText.withOpacity(0.7) : Palete.lightText.withOpacity(0.7)
                       ),
                     ),
-                    style: const TextStyle(color: Colors.black),
+                    style: TextStyle(color: isDarkTheme ? Palete.darkText : Palete.lightText),
                     items: rooms.map((room) => DropdownMenuItem(
                       value: room,
-                      child: Text(room, style: const TextStyle(color: Colors.black)),
+                      child: Text(
+                          room,
+                          style: TextStyle(color: isDarkTheme ? Palete.darkText : Palete.lightText)
+                      ),
                     )).toList(),
                     onChanged: (value) => selectedRoom = value!,
                     validator: (value) =>
@@ -105,23 +117,19 @@ class DevicesPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   DropdownButtonFormField<DeviceType>(
                     value: selectedType,
-                    dropdownColor: Colors.white,
-                    decoration: const InputDecoration(
+                    dropdownColor: isDarkTheme ? Palete.darkSurface : Palete.lightSurface,
+                    decoration: InputDecoration(
                       labelText: 'Device Type',
-                      labelStyle: TextStyle(color: Colors.black54),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black12),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Palete.primary),
+                      labelStyle: TextStyle(
+                          color: isDarkTheme ? Palete.darkText.withOpacity(0.7) : Palete.lightText.withOpacity(0.7)
                       ),
                     ),
-                    style: const TextStyle(color: Colors.black),
+                    style: TextStyle(color: isDarkTheme ? Palete.darkText : Palete.lightText),
                     items: deviceTypes.map((type) => DropdownMenuItem(
                       value: type,
                       child: Text(
                         type.toString().split('.').last,
-                        style: const TextStyle(color: Colors.black),
+                        style: TextStyle(color: isDarkTheme ? Palete.darkText : Palete.lightText),
                       ),
                     )).toList(),
                     onChanged: (value) => selectedType = value!,
@@ -135,12 +143,15 @@ class DevicesPage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: Navigator.of(context).pop,
-              child: const Text('Cancel', style: TextStyle(color: Colors.black54)),
+              child: Text(
+                  'Cancel',
+                  style: TextStyle(color: isDarkTheme ? Palete.darkText.withOpacity(0.7) : Palete.lightText.withOpacity(0.7))
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Palete.primary, // Or your light theme primary color
-                foregroundColor: Colors.white,
+                backgroundColor: Palete.primary,
+                foregroundColor: isDarkTheme ? Palete.darkText : Colors.white,
               ),
               onPressed: () {
                 if (formKey.currentState?.validate() ?? false) {
@@ -168,6 +179,9 @@ class _DeviceList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+
     return BlocBuilder<DevicesBloc, DevicesState>(
       builder: (context, state) {
         if (state is DevicesLoadingState) {
@@ -179,7 +193,7 @@ class _DeviceList extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(state.message),
+                Text(state.message, style: TextStyle(color: textColor)),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () => context.read<DevicesBloc>().add(LoadDevicesEvent()),
@@ -192,10 +206,10 @@ class _DeviceList extends StatelessWidget {
 
         if (state is DevicesLoadedState) {
           return state.devices.isEmpty
-              ? const Center(
+              ? Center(
             child: Text(
               'No devices found',
-              style: TextStyle(color: Palete.lightText),
+              style: TextStyle(color: textColor.withOpacity(0.7)),
             ),
           )
               : GridView.builder(
@@ -218,23 +232,27 @@ class _DeviceList extends StatelessWidget {
           );
         }
 
-        return const Center(child: Text('Unknown state'));
+        return Center(child: Text('Unknown state', style: TextStyle(color: textColor)));
       },
     );
   }
 
   void _showDeviceOptions(BuildContext context, Device device) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+    final surfaceColor = isDarkTheme ? Palete.darkSurface : Palete.lightSurface;
+
     showModalBottomSheet(
       context: context,
-      backgroundColor: Palete.darkSurface,
+      backgroundColor: surfaceColor,
       builder: (context) {
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const Icon(Icons.settings, color: Colors.black54),
-                title: const Text('Settings', style: TextStyle(color: Colors.black)),
+                leading: Icon(Icons.settings, color: textColor.withOpacity(0.7)),
+                title: Text('Settings', style: TextStyle(color: textColor)),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(
@@ -244,8 +262,8 @@ class _DeviceList extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.edit, color: Colors.black54),
-                title: const Text('Edit', style: TextStyle(color: Colors.black)),
+                leading: Icon(Icons.edit, color: textColor.withOpacity(0.7)),
+                title: Text('Edit', style: TextStyle(color: textColor)),
                 onTap: () {
                   Navigator.pop(context);
                   _showEditDeviceDialog(context, device);
@@ -267,6 +285,7 @@ class _DeviceList extends StatelessWidget {
   }
 
   void _showEditDeviceDialog(BuildContext context, Device device) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     final formKey = GlobalKey<FormState>();
     String deviceName = device.name;
     String selectedRoom = device.room;
@@ -279,8 +298,11 @@ class _DeviceList extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Palete.darkSurface,
-          title: const Text('Edit Device', style: TextStyle(color: Colors.white)),
+          backgroundColor: isDarkTheme ? Palete.darkSurface : Palete.lightSurface,
+          title: Text(
+              'Edit Device',
+              style: TextStyle(color: isDarkTheme ? Palete.darkText : Palete.lightText)
+          ),
           content: Form(
             key: formKey,
             child: SizedBox(
@@ -289,11 +311,13 @@ class _DeviceList extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Device Name',
-                      labelStyle: TextStyle(color: Palete.lightText),
+                      labelStyle: TextStyle(
+                          color: isDarkTheme ? Palete.darkText.withOpacity(0.7) : Palete.lightText.withOpacity(0.7)
+                      ),
                     ),
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: isDarkTheme ? Palete.darkText : Palete.lightText),
                     initialValue: device.name,
                     validator: (value) =>
                     value?.isEmpty ?? true ? 'Name is required' : null,
@@ -302,12 +326,14 @@ class _DeviceList extends StatelessWidget {
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     value: selectedRoom,
-                    dropdownColor: Palete.darkSurface,
-                    decoration: const InputDecoration(
+                    dropdownColor: isDarkTheme ? Palete.darkSurface : Palete.lightSurface,
+                    decoration: InputDecoration(
                       labelText: 'Room',
-                      labelStyle: TextStyle(color: Palete.lightText),
+                      labelStyle: TextStyle(
+                          color: isDarkTheme ? Palete.darkText.withOpacity(0.7) : Palete.lightText.withOpacity(0.7)
+                      ),
                     ),
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: isDarkTheme ? Palete.darkText : Palete.lightText),
                     items: rooms.map((room) => DropdownMenuItem(
                       value: room,
                       child: Text(room),
@@ -319,17 +345,19 @@ class _DeviceList extends StatelessWidget {
                   const SizedBox(height: 16),
                   DropdownButtonFormField<DeviceType>(
                     value: selectedType,
-                    dropdownColor: Palete.darkSurface,
-                    decoration: const InputDecoration(
+                    dropdownColor: isDarkTheme ? Palete.darkSurface : Palete.lightSurface,
+                    decoration: InputDecoration(
                       labelText: 'Device Type',
-                      labelStyle: TextStyle(color: Palete.lightText),
+                      labelStyle: TextStyle(
+                          color: isDarkTheme ? Palete.darkText.withOpacity(0.7) : Palete.lightText.withOpacity(0.7)
+                      ),
                     ),
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: isDarkTheme ? Palete.darkText : Palete.lightText),
                     items: deviceTypes.map((type) => DropdownMenuItem(
                       value: type,
                       child: Text(
                         type.toString().split('.').last,
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(color: isDarkTheme ? Palete.darkText : Palete.lightText),
                       ),
                     )).toList(),
                     onChanged: (value) => selectedType = value!,
@@ -343,10 +371,16 @@ class _DeviceList extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: Navigator.of(context).pop,
-              child: const Text('Cancel', style: TextStyle(color: Palete.lightText)),
+              child: Text(
+                  'Cancel',
+                  style: TextStyle(color: isDarkTheme ? Palete.darkText.withOpacity(0.7) : Palete.lightText.withOpacity(0.7))
+              ),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Palete.primary),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Palete.primary,
+                foregroundColor: isDarkTheme ? Palete.darkText : Colors.white,
+              ),
               onPressed: () {
                 if (formKey.currentState?.validate() ?? false) {
                   final updatedDevice = device.copyWith(
@@ -367,20 +401,29 @@ class _DeviceList extends StatelessWidget {
   }
 
   void _showDeleteConfirmation(BuildContext context, String deviceId) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Palete.darkSurface,
-          title: const Text('Delete Device', style: TextStyle(color: Colors.white)),
-          content: const Text(
+          backgroundColor: isDarkTheme ? Palete.darkSurface : Palete.lightSurface,
+          title: Text(
+              'Delete Device',
+              style: TextStyle(color: textColor)
+          ),
+          content: Text(
             'Are you sure you want to delete this device?',
-            style: TextStyle(color: Palete.lightText),
+            style: TextStyle(color: textColor.withOpacity(0.7)),
           ),
           actions: [
             TextButton(
               onPressed: Navigator.of(context).pop,
-              child: const Text('Cancel', style: TextStyle(color: Palete.lightText)),
+              child: Text(
+                  'Cancel',
+                  style: TextStyle(color: textColor.withOpacity(0.7))
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
@@ -388,7 +431,10 @@ class _DeviceList extends StatelessWidget {
                 context.read<DevicesBloc>().add(DeleteDeviceEvent(deviceId));
                 Navigator.of(context).pop();
               },
-              child: const Text('Delete'),
+              child: Text(
+                'Delete',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         );

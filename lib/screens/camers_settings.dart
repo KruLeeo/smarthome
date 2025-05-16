@@ -30,15 +30,24 @@ class _CameraSettingsState extends State<CameraSettings> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDarkTheme ? Palete.darkSurface : Palete.lightSurface;
+    final cardColor = isDarkTheme ? Palete.darkBackground : Palete.lightBackground;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+    final disabledColor = isDarkTheme ? Colors.grey.shade700 : Colors.grey.shade400;
+    final inactiveIconColor = isDarkTheme ? Colors.grey.shade500 : Colors.grey.shade600;
+
     return Column(
       children: [
         // Camera preview header
         Container(
           height: 200,
           decoration: BoxDecoration(
-            color: Colors.grey.shade200,
+            color: isDarkTheme ? Colors.grey.shade800 : Colors.grey.shade200,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(
+              color: isDarkTheme ? Colors.grey.shade700 : Colors.grey.shade300,
+            ),
             image: _isOn
                 ? const DecorationImage(
               image: NetworkImage('https://example.com/camera-feed.jpg'),
@@ -53,11 +62,17 @@ class _CameraSettingsState extends State<CameraSettings> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.videocam_off, size: 50, color: Colors.grey.shade600),
+                      Icon(
+                        Icons.videocam_off,
+                        size: 50,
+                        color: isDarkTheme ? Colors.grey.shade400 : Colors.grey.shade600,
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         'Камера выключена',
-                        style: TextStyle(color: Colors.grey.shade800),
+                        style: TextStyle(
+                          color: isDarkTheme ? Colors.grey.shade300 : Colors.grey.shade800,
+                        ),
                       ),
                     ],
                   ),
@@ -78,7 +93,10 @@ class _CameraSettingsState extends State<CameraSettings> {
                           children: [
                             Icon(Icons.nightlight_round, size: 16, color: Colors.green),
                             const SizedBox(width: 4),
-                            Text('Ночной режим', style: TextStyle(color: Colors.white, fontSize: 12)),
+                            Text(
+                              'Ночной режим',
+                              style: TextStyle(color: Colors.white, fontSize: 12),
+                            ),
                           ],
                         ),
                       ),
@@ -94,12 +112,14 @@ class _CameraSettingsState extends State<CameraSettings> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(
+              color: isDarkTheme ? Colors.grey.shade700 : Colors.grey.shade300,
+            ),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.black.withOpacity(isDarkTheme ? 0.3 : 0.1),
                 blurRadius: 10,
                 spreadRadius: 2,
               ),
@@ -112,6 +132,10 @@ class _CameraSettingsState extends State<CameraSettings> {
                 icon: Icons.power_settings_new,
                 title: 'Состояние камеры',
                 value: _isOn,
+                isEnabled: true,
+                isDarkTheme: isDarkTheme,
+                textColor: textColor,
+                cardColor: cardColor,
                 onChanged: (value) {
                   setState(() => _isOn = value);
                   _updateDevice();
@@ -124,6 +148,10 @@ class _CameraSettingsState extends State<CameraSettings> {
                 icon: Icons.directions_run,
                 title: 'Детекция движения',
                 value: _motionDetection,
+                isEnabled: _isOn,
+                isDarkTheme: isDarkTheme,
+                textColor: textColor,
+                cardColor: cardColor,
                 onChanged: _isOn ? (value) {
                   setState(() => _motionDetection = value);
                   _updateDevice();
@@ -136,6 +164,10 @@ class _CameraSettingsState extends State<CameraSettings> {
                 icon: Icons.nightlight_round,
                 title: 'Ночное видение',
                 value: _nightVision,
+                isEnabled: _isOn,
+                isDarkTheme: isDarkTheme,
+                textColor: textColor,
+                cardColor: cardColor,
                 onChanged: _isOn ? (value) {
                   setState(() => _nightVision = value);
                   _updateDevice();
@@ -148,6 +180,10 @@ class _CameraSettingsState extends State<CameraSettings> {
                 icon: Icons.mic,
                 title: 'Детекция звука',
                 value: _soundDetection,
+                isEnabled: _isOn,
+                isDarkTheme: isDarkTheme,
+                textColor: textColor,
+                cardColor: cardColor,
                 onChanged: _isOn ? (value) {
                   setState(() => _soundDetection = value);
                   _updateDevice();
@@ -164,7 +200,7 @@ class _CameraSettingsState extends State<CameraSettings> {
               child: Text(
                 'Включите камеру для доступа к настройкам',
                 style: TextStyle(
-                  color: Colors.grey.shade600,
+                  color: isDarkTheme ? Colors.grey.shade400 : Colors.grey.shade600,
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
                 ),
@@ -179,23 +215,30 @@ class _CameraSettingsState extends State<CameraSettings> {
     required IconData icon,
     required String title,
     required bool value,
+    required bool isEnabled,
+    required bool isDarkTheme,
+    required Color textColor,
+    required Color cardColor,
     required ValueChanged<bool>? onChanged,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: cardColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          Icon(icon, color: onChanged != null ? Palete.primary : Colors.grey.shade600),
+          Icon(
+            icon,
+            color: isEnabled ? Palete.primary : (isDarkTheme ? Colors.grey.shade600 : Colors.grey.shade500),
+          ),
           const SizedBox(width: 16),
           Expanded(
             child: Text(
               title,
               style: TextStyle(
-                color: onChanged != null ? Colors.black : Colors.grey.shade600,
+                color: isEnabled ? textColor : (isDarkTheme ? Colors.grey.shade500 : Colors.grey.shade600),
               ),
             ),
           ),
@@ -203,6 +246,7 @@ class _CameraSettingsState extends State<CameraSettings> {
             value: value,
             onChanged: onChanged,
             activeColor: Palete.primary,
+            inactiveTrackColor: isDarkTheme ? Colors.grey.shade700 : Colors.grey.shade400,
           ),
         ],
       ),

@@ -5,6 +5,7 @@ import 'package:testik2/screens/dashboard_page.dart';
 import 'package:testik2/screens/home_controll_bloc.dart';
 
 import 'core/theme/theme.dart';
+import 'core/theme/theme_provider.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/pages/login_page.dart';
 import 'features/device/bloc/devices_bloc.dart';
@@ -17,6 +18,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()), // Добавляем ThemeProvider
         BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
         BlocProvider(create: (_) => serviceLocator<HomeControlBloc>()),
         BlocProvider(create: (_) => serviceLocator<DevicesBloc>()),
@@ -32,10 +34,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Smart Home',
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme, // Светлая тема
+      darkTheme: AppTheme.darkTheme, // Темная тема
+      themeMode: themeProvider.themeMode, // Используем текущий режим из ThemeProvider
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginPage(),

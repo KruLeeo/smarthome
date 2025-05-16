@@ -39,7 +39,10 @@ class _LightSettingsState extends State<LightSettings> {
 
   @override
   Widget build(BuildContext context) {
-    final bulbColor = _isOn ? _getBulbColor() : Colors.grey[400];
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+    final disabledColor = isDarkTheme ? Colors.grey.shade600 : Colors.grey.shade400;
+    final bulbColor = _isOn ? _getBulbColor() : disabledColor;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +83,7 @@ class _LightSettingsState extends State<LightSettings> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: _isOn ? Palete.primary : Colors.grey,
+                  color: _isOn ? Palete.primary : disabledColor,
                 ),
               ),
             ],
@@ -90,15 +93,19 @@ class _LightSettingsState extends State<LightSettings> {
 
         // Power switch
         SwitchListTile(
-          title: const Text('Состояние',
-              style: TextStyle(fontSize: 16, color: Colors.black)),
-          subtitle: Text(_isOn ? 'Включено' : 'Выключено',
-              style: TextStyle(color: Colors.black87)),
+          title: Text(
+            'Состояние',
+            style: TextStyle(fontSize: 16, color: textColor),
+          ),
+          subtitle: Text(
+            _isOn ? 'Включено' : 'Выключено',
+            style: TextStyle(color: textColor.withOpacity(0.7)),
+          ),
           value: _isOn,
           activeColor: Palete.primary,
           secondary: Icon(
             _isOn ? Icons.power_settings_new : Icons.power_off,
-            color: _isOn ? Palete.primary : Colors.grey,
+            color: _isOn ? Palete.primary : disabledColor,
           ),
           onChanged: (value) {
             setState(() => _isOn = value);
@@ -113,12 +120,17 @@ class _LightSettingsState extends State<LightSettings> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Яркость',
-                  style: TextStyle(fontSize: 16, color: Colors.black)),
+              Text(
+                'Яркость',
+                style: TextStyle(fontSize: 16, color: textColor),
+              ),
               const SizedBox(height: 10),
               Row(
                 children: [
-                  Icon(Icons.brightness_low, color: Colors.black87),
+                  Icon(
+                    Icons.brightness_low,
+                    color: _isOn ? textColor : disabledColor,
+                  ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Slider(
@@ -132,10 +144,13 @@ class _LightSettingsState extends State<LightSettings> {
                         _updateDevice();
                       } : null,
                       activeColor: Palete.primary,
-                      inactiveColor: Colors.grey[300],
+                      inactiveColor: isDarkTheme ? Colors.grey.shade700 : Colors.grey.shade300,
                     ),
                   ),
-                  Icon(Icons.brightness_high, color: Colors.black87),
+                  Icon(
+                    Icons.brightness_high,
+                    color: _isOn ? textColor : disabledColor,
+                  ),
                 ],
               ),
             ],
@@ -149,8 +164,10 @@ class _LightSettingsState extends State<LightSettings> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Цвет света',
-                  style: TextStyle(fontSize: 16, color: Colors.black)),
+              Text(
+                'Цвет света',
+                style: TextStyle(fontSize: 16, color: textColor),
+              ),
               const SizedBox(height: 10),
               Wrap(
                 spacing: 12,
@@ -159,32 +176,38 @@ class _LightSettingsState extends State<LightSettings> {
                   _ColorOption(
                     color: Colors.white,
                     isSelected: _selectedColor.value == Colors.white.value,
-                    onTap: () => _changeColor(Colors.white),
+                    isEnabled: _isOn,
+                    onTap: _isOn ? () => _changeColor(Colors.white) : null,
                   ),
                   _ColorOption(
                     color: Colors.yellow[200]!,
                     isSelected: _selectedColor.value == Colors.yellow[200]!.value,
-                    onTap: () => _changeColor(Colors.yellow[200]!),
+                    isEnabled: _isOn,
+                    onTap: _isOn ? () => _changeColor(Colors.yellow[200]!) : null,
                   ),
                   _ColorOption(
                     color: Colors.orange[200]!,
                     isSelected: _selectedColor.value == Colors.orange[200]!.value,
-                    onTap: () => _changeColor(Colors.orange[200]!),
+                    isEnabled: _isOn,
+                    onTap: _isOn ? () => _changeColor(Colors.orange[200]!) : null,
                   ),
                   _ColorOption(
                     color: Colors.red[200]!,
                     isSelected: _selectedColor.value == Colors.red[200]!.value,
-                    onTap: () => _changeColor(Colors.red[200]!),
+                    isEnabled: _isOn,
+                    onTap: _isOn ? () => _changeColor(Colors.red[200]!) : null,
                   ),
                   _ColorOption(
                     color: Colors.blue[200]!,
                     isSelected: _selectedColor.value == Colors.blue[200]!.value,
-                    onTap: () => _changeColor(Colors.blue[200]!),
+                    isEnabled: _isOn,
+                    onTap: _isOn ? () => _changeColor(Colors.blue[200]!) : null,
                   ),
                   _ColorOption(
                     color: Colors.green[200]!,
                     isSelected: _selectedColor.value == Colors.green[200]!.value,
-                    onTap: () => _changeColor(Colors.green[200]!),
+                    isEnabled: _isOn,
+                    onTap: _isOn ? () => _changeColor(Colors.green[200]!) : null,
                   ),
                 ],
               ),
@@ -199,7 +222,7 @@ class _LightSettingsState extends State<LightSettings> {
               child: Text(
                 'Включите свет для регулировки',
                 style: TextStyle(
-                  color: Colors.grey[600],
+                  color: disabledColor,
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
                 ),
@@ -234,39 +257,47 @@ class _LightSettingsState extends State<LightSettings> {
 class _ColorOption extends StatelessWidget {
   final Color color;
   final bool isSelected;
+  final bool isEnabled;
   final VoidCallback? onTap;
 
   const _ColorOption({
     required this.color,
     this.isSelected = false,
+    this.isEnabled = true,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final borderColor = isDarkTheme ? Colors.grey.shade600 : Colors.grey.shade300;
+
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-          border: isSelected
-              ? Border.all(color: Palete.primary, width: 3)
-              : Border.all(color: Colors.grey[300]!, width: 1),
-          boxShadow: [
-            if (isSelected)
-              BoxShadow(
-                color: color.withOpacity(0.5),
-                blurRadius: 8,
-                spreadRadius: 2,
-              ),
-          ],
+      child: Opacity(
+        opacity: isEnabled ? 1.0 : 0.5,
+        child: Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            border: isSelected
+                ? Border.all(color: Palete.primary, width: 3)
+                : Border.all(color: borderColor, width: 1),
+            boxShadow: [
+              if (isSelected && isEnabled)
+                BoxShadow(
+                  color: color.withOpacity(0.5),
+                  blurRadius: 8,
+                  spreadRadius: 2,
+                ),
+            ],
+          ),
+          child: isSelected && isEnabled
+              ? const Icon(Icons.check, color: Colors.white, size: 20)
+              : null,
         ),
-        child: isSelected
-            ? const Icon(Icons.check, color: Colors.white, size: 20)
-            : null,
       ),
     );
   }

@@ -9,6 +9,11 @@ class RoomSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final unselectedBackground = isDarkTheme ? Palete.darkSurface : Palete.lightSurface;
+    final unselectedTextColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+    final borderColor = isDarkTheme ? Colors.grey.shade700 : Colors.grey.shade300;
+
     return BlocBuilder<HomeControlBloc, HomeControlState>(
       builder: (context, state) {
         if (state is! HomeControlLoaded) return const SizedBox();
@@ -32,19 +37,20 @@ class RoomSelector extends StatelessWidget {
                         FilterByRoom(selected ? rooms[index] : null),
                       );
                     },
-                    backgroundColor: Colors.white, // Белый фон невыбранного чипа
-                    selectedColor: Palete.primary, // Цвет выбранного чипа
-                    checkmarkColor: Colors.white, // Цвет галочки
+                    backgroundColor: unselectedBackground,
+                    selectedColor: Palete.primary,
+                    checkmarkColor: Colors.white,
                     labelStyle: TextStyle(
                       color: state.selectedRoom == rooms[index]
-                          ? Colors.white // Белый текст для выбранного чипа
-                          : Colors.black, // Черный текст для невыбранного
+                          ? Colors.white
+                          : unselectedTextColor,
                     ),
                     shape: StadiumBorder(
                       side: BorderSide(
                         color: state.selectedRoom == rooms[index]
-                            ? Palete.primary // Граница совпадает с фоном при выборе
-                            : Colors.grey.shade300, // Серая граница невыбранного
+                            ? Palete.primary
+                            : borderColor,
+                        width: 1,
                       ),
                     ),
                   ),

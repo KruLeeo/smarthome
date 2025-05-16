@@ -1,4 +1,3 @@
-// screens/device_settings_page.dart
 import 'package:flutter/material.dart';
 import 'package:testik2/core/theme/colors.dart';
 import 'package:testik2/features/device/device.dart';
@@ -18,15 +17,22 @@ class DeviceSettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDarkTheme ? Palete.darkBackground : Palete.lightBackground;
+    final surfaceColor = isDarkTheme ? Palete.darkSurface : Palete.lightSurface;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           '${device.name} Settings',
-          style: TextStyle(color: Colors.black), // Чёрный цвет текста
+          style: TextStyle(color: textColor),
         ),
-        backgroundColor: Colors.white, // Белый фон для контраста
-        iconTheme: IconThemeData(color: Colors.black), // Чёрные иконки (например, кнопка "назад")
+        backgroundColor: surfaceColor,
+        iconTheme: IconThemeData(color: textColor),
+        elevation: 0,
       ),
+      backgroundColor: backgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: _buildSettingsForDeviceType(),

@@ -1,7 +1,7 @@
-// home_controll_bloc.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../features/device/device.dart';
 
+// События
 abstract class HomeControlEvent {}
 
 class LoadHomeDevices extends HomeControlEvent {}
@@ -10,6 +10,7 @@ class FilterByRoom extends HomeControlEvent {
   final String? room;
   FilterByRoom(this.room);
 }
+
 class AddDevice extends HomeControlEvent {
   final Device device;
   AddDevice(this.device);
@@ -20,11 +21,17 @@ class UpdateDevice extends HomeControlEvent {
   UpdateDevice(this.device);
 }
 
+class DeleteDevice extends HomeControlEvent {
+  final String deviceId;
+  DeleteDevice(this.deviceId);
+}
+
 class ToggleDevice extends HomeControlEvent {
   final String deviceId;
   ToggleDevice(this.deviceId);
 }
 
+// Состояния
 abstract class HomeControlState {}
 
 class HomeControlLoading extends HomeControlState {}
@@ -51,46 +58,96 @@ class HomeControlError extends HomeControlState {
   HomeControlError(this.message);
 }
 
+// Блок
 class HomeControlBloc extends Bloc<HomeControlEvent, HomeControlState> {
   HomeControlBloc() : super(HomeControlLoading()) {
-    on<LoadHomeDevices>((event, emit) async {
-      emit(HomeControlLoading());
-      try {
-        // Здесь должна быть логика загрузки устройств из Supabase
-        await Future.delayed(const Duration(seconds: 1));
-        emit(HomeControlLoaded(_demoDevices));
-      } catch (e) {
-        emit(HomeControlError(e.toString()));
-      }
-    });
-    on<AddDevice>((event, emit) {
-      if (state is HomeControlLoaded) {
-        final currentState = state as HomeControlLoaded;
-        emit(HomeControlLoaded([...currentState.devices, event.device], selectedRoom: currentState.selectedRoom));
-      }
-    });
-
-    on<FilterByRoom>((event, emit) {
-      if (state is HomeControlLoaded) {
-        final currentState = state as HomeControlLoaded;
-        emit(currentState.copyWith(selectedRoom: event.room));
-      }
-    });
-
-
-    on<ToggleDevice>((event, emit) {
-      if (state is HomeControlLoaded) {
-        final currentState = state as HomeControlLoaded;
-        final updatedDevices = currentState.devices.map((device) {
-          return device.id == event.deviceId
-              ? device.copyWith(isOn: !device.isOn)
-              : device;
-        }).toList();
-        emit(currentState.copyWith(devices: updatedDevices));
-      }
-    });
+    on<LoadHomeDevices>(_onLoadDevices);
+    on<AddDevice>(_onAddDevice);
+    on<UpdateDevice>(_onUpdateDevice);
+    on<DeleteDevice>(_onDeleteDevice);
+    on<ToggleDevice>(_onToggleDevice);
+    on<FilterByRoom>(_onFilterByRoom);
   }
 
+  Future<void> _onLoadDevices(
+      LoadHomeDevices event,
+      Emitter<HomeControlState> emit,
+      ) async {
+    emit(HomeControlLoading());
+    try {
+      // Здесь должна быть логика загрузки устройств из Supabase
+      await Future.delayed(const Duration(seconds: 1));
+      emit(HomeControlLoaded(_demoDevices));
+    } catch (e) {
+      emit(HomeControlError('Failed to load devices: ${e.toString()}'));
+    }
+  }
+
+  void _onAddDevice(
+      AddDevice event,
+      Emitter<HomeControlState> emit,
+      ) {
+    if (state is HomeControlLoaded) {
+      final currentState = state as HomeControlLoaded;
+      emit(HomeControlLoaded(
+        [...currentState.devices, event.device],
+        selectedRoom: currentState.selectedRoom,
+      ));
+    }
+  }
+
+  void _onUpdateDevice(
+      UpdateDevice event,
+      Emitter<HomeControlState> emit,
+      ) {
+    if (state is HomeControlLoaded) {
+      final currentState = state as HomeControlLoaded;
+      final updatedDevices = currentState.devices.map((device) {
+        return device.id == event.device.id ? event.device : device;
+      }).toList();
+      emit(currentState.copyWith(devices: updatedDevices));
+    }
+  }
+
+  void _onDeleteDevice(
+      DeleteDevice event,
+      Emitter<HomeControlState> emit,
+      ) {
+    if (state is HomeControlLoaded) {
+      final currentState = state as HomeControlLoaded;
+      final updatedDevices = currentState.devices
+          .where((device) => device.id != event.deviceId)
+          .toList();
+      emit(currentState.copyWith(devices: updatedDevices));
+    }
+  }
+
+  void _onToggleDevice(
+      ToggleDevice event,
+      Emitter<HomeControlState> emit,
+      ) {
+    if (state is HomeControlLoaded) {
+      final currentState = state as HomeControlLoaded;
+      final updatedDevices = currentState.devices.map((device) {
+        return device.id == event.deviceId
+            ? device.copyWith(isOn: !device.isOn)
+            : device;
+      }).toList();
+      emit(currentState.copyWith(devices: updatedDevices));
+    }
+  }
+
+  void _onFilterByRoom(
+      FilterByRoom event,
+      Emitter<HomeControlState> emit,
+      ) {
+    if (state is HomeControlLoaded) {
+      final currentState = state as HomeControlLoaded;
+      emit(currentState.copyWith(selectedRoom: event.room));
+    }
+  }
+
+  // Демо-устройства
   final List<Device> _demoDevices = [
     Device(
       id: '1',

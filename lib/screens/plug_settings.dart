@@ -28,8 +28,15 @@ class _PlugSettingsState extends State<PlugSettings> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDarkTheme ? Palete.darkBackground : Palete.lightBackground;
+    final surfaceColor = isDarkTheme ? Palete.darkSurface : Palete.lightSurface;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+    final disabledColor = isDarkTheme ? Colors.grey.shade600 : Colors.grey.shade400;
+    final borderColor = isDarkTheme ? Colors.grey.shade700 : Colors.grey.shade300;
+
     return Scaffold(
-      backgroundColor: Colors.white, // Белый фон всей страницы
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -39,12 +46,12 @@ class _PlugSettingsState extends State<PlugSettings> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white, // Белый фон контейнера
+                  color: surfaceColor,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey.shade300), // Серая граница
+                  border: Border.all(color: borderColor),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: Colors.black.withOpacity(isDarkTheme ? 0.2 : 0.1),
                       blurRadius: 10,
                       spreadRadius: 2,
                     ),
@@ -64,7 +71,7 @@ class _PlugSettingsState extends State<PlugSettings> {
                             border: Border.all(
                               color: _isOn
                                   ? Palete.primary.withOpacity(0.3)
-                                  : Colors.grey.withOpacity(0.3),
+                                  : disabledColor.withOpacity(0.3),
                               width: 8,
                             ),
                           ),
@@ -75,7 +82,7 @@ class _PlugSettingsState extends State<PlugSettings> {
                             Icon(
                               Icons.power,
                               size: 60,
-                              color: _isOn ? Palete.primary : Colors.grey,
+                              color: _isOn ? Palete.primary : disabledColor,
                             ),
                             const SizedBox(height: 8),
                             Text(
@@ -83,7 +90,7 @@ class _PlugSettingsState extends State<PlugSettings> {
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
-                                color: _isOn ? Palete.primary : Colors.grey,
+                                color: _isOn ? Palete.primary : disabledColor,
                               ),
                             ),
                             if (_isOn && _schedule != 'none')
@@ -92,7 +99,7 @@ class _PlugSettingsState extends State<PlugSettings> {
                                 child: Text(
                                   _getScheduleText(_schedule),
                                   style: TextStyle(
-                                    color: Colors.grey[600],
+                                    color: disabledColor,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
@@ -105,17 +112,19 @@ class _PlugSettingsState extends State<PlugSettings> {
 
                     // Power switch
                     SwitchListTile(
-                      title: const Text('Состояние',
-                          style: TextStyle(fontSize: 16, color: Colors.black)),
+                      title: Text(
+                        'Состояние',
+                        style: TextStyle(fontSize: 16, color: textColor),
+                      ),
                       subtitle: Text(
                         _isOn ? 'Розетка включена' : 'Розетка выключена',
-                        style: TextStyle(color: Colors.black87),
+                        style: TextStyle(color: textColor.withOpacity(0.7)),
                       ),
                       value: _isOn,
                       activeColor: Palete.primary,
                       secondary: Icon(
                         _isOn ? Icons.power : Icons.power_off,
-                        color: _isOn ? Palete.primary : Colors.grey,
+                        color: _isOn ? Palete.primary : disabledColor,
                       ),
                       onChanged: _toggleDeviceState,
                     ),
@@ -128,12 +137,12 @@ class _PlugSettingsState extends State<PlugSettings> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white, // Белый фон
+                  color: surfaceColor,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey.shade300),
+                  border: Border.all(color: borderColor),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: Colors.black.withOpacity(isDarkTheme ? 0.2 : 0.1),
                       blurRadius: 10,
                       spreadRadius: 2,
                     ),
@@ -143,15 +152,19 @@ class _PlugSettingsState extends State<PlugSettings> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SwitchListTile(
-                      title: const Text('Мониторинг энергии',
-                          style: TextStyle(fontSize: 16, color: Colors.black)),
-                      subtitle: const Text('Отслеживание потребления электроэнергии',
-                          style: TextStyle(color: Colors.black87)),
+                      title: Text(
+                        'Мониторинг энергии',
+                        style: TextStyle(fontSize: 16, color: textColor),
+                      ),
+                      subtitle: Text(
+                        'Отслеживание потребления электроэнергии',
+                        style: TextStyle(color: textColor.withOpacity(0.7)),
+                      ),
                       value: _energyMonitoring,
                       activeColor: Palete.primary,
                       secondary: Icon(
                         Icons.bolt,
-                        color: _energyMonitoring ? Palete.primary : Colors.grey,
+                        color: _energyMonitoring ? Palete.primary : disabledColor,
                       ),
                       onChanged: (value) {
                         setState(() => _energyMonitoring = value);
@@ -160,7 +173,7 @@ class _PlugSettingsState extends State<PlugSettings> {
                     ),
                     if (_energyMonitoring) ...[
                       const SizedBox(height: 10),
-                      _buildEnergyStats(),
+                      _buildEnergyStats(isDarkTheme, textColor),
                     ],
                   ],
                 ),
@@ -171,12 +184,12 @@ class _PlugSettingsState extends State<PlugSettings> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white, // Белый фон
+                  color: surfaceColor,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey.shade300),
+                  border: Border.all(color: borderColor),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: Colors.black.withOpacity(isDarkTheme ? 0.2 : 0.1),
                       blurRadius: 10,
                       spreadRadius: 2,
                     ),
@@ -185,8 +198,10 @@ class _PlugSettingsState extends State<PlugSettings> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Расписание',
-                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    Text(
+                      'Расписание',
+                      style: TextStyle(fontSize: 16, color: textColor),
+                    ),
                     const SizedBox(height: 10),
                     Wrap(
                       spacing: 8,
@@ -196,31 +211,37 @@ class _PlugSettingsState extends State<PlugSettings> {
                           label: 'Нет',
                           isActive: _schedule == 'none',
                           onPressed: () => _setSchedule('none'),
+                          isDarkTheme: isDarkTheme,
                         ),
                         _ScheduleOption(
                           label: 'Утро',
                           isActive: _schedule == 'morning',
                           onPressed: () => _setSchedule('morning'),
+                          isDarkTheme: isDarkTheme,
                         ),
                         _ScheduleOption(
                           label: 'День',
                           isActive: _schedule == 'day',
                           onPressed: () => _setSchedule('day'),
+                          isDarkTheme: isDarkTheme,
                         ),
                         _ScheduleOption(
                           label: 'Вечер',
                           isActive: _schedule == 'evening',
                           onPressed: () => _setSchedule('evening'),
+                          isDarkTheme: isDarkTheme,
                         ),
                         _ScheduleOption(
                           label: 'Ночь',
                           isActive: _schedule == 'night',
                           onPressed: () => _setSchedule('night'),
+                          isDarkTheme: isDarkTheme,
                         ),
                         _ScheduleOption(
                           label: 'Кастомное',
                           isActive: _schedule == 'custom',
                           onPressed: () => _showCustomScheduleDialog(context),
+                          isDarkTheme: isDarkTheme,
                         ),
                       ],
                     ),
@@ -235,41 +256,49 @@ class _PlugSettingsState extends State<PlugSettings> {
     );
   }
 
-  Widget _buildEnergyStats() {
+  Widget _buildEnergyStats(bool isDarkTheme, Color textColor) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100, // Светло-серый фон
+        color: isDarkTheme ? Colors.grey.shade800 : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Expanded(
-            child: _buildStatItem('Сегодня', '2.5 кВт·ч'),
+            child: _buildStatItem('Сегодня', '2.5 кВт·ч', textColor),
           ),
           Expanded(
-            child: _buildStatItem('Вчера', '3.1 кВт·ч'),
+            child: _buildStatItem('Вчера', '3.1 кВт·ч', textColor),
           ),
           Expanded(
-            child: _buildStatItem('Месяц', '45 кВт·ч'),
+            child: _buildStatItem('Месяц', '45 кВт·ч', textColor),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildStatItem(String label, String value) {
+  Widget _buildStatItem(String label, String value, Color textColor) {
     return Column(
       children: [
-        Text(label,
-            style: TextStyle(color: Colors.grey[800]), // Темно-серый текст
-            textAlign: TextAlign.center),
+        Text(
+          label,
+          style: TextStyle(
+            color: textColor.withOpacity(0.7),
+          ),
+          textAlign: TextAlign.center,
+        ),
         const SizedBox(height: 4),
-        Text(value,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.black),
-            textAlign: TextAlign.center),
+        Text(
+          value,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: textColor,
+          ),
+          textAlign: TextAlign.center,
+        ),
       ],
     );
   }
@@ -291,20 +320,34 @@ class _PlugSettingsState extends State<PlugSettings> {
   }
 
   void _showCustomScheduleDialog(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+    final backgroundColor = isDarkTheme ? Palete.darkSurface : Palete.lightSurface;
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Кастомное расписание', style: TextStyle(color: Colors.black)),
-        content: const Column(
+        backgroundColor: backgroundColor,
+        title: Text(
+          'Кастомное расписание',
+          style: TextStyle(color: textColor),
+        ),
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Настройте ваше расписание', style: TextStyle(color: Colors.black87)),
+            Text(
+              'Настройте ваше расписание',
+              style: TextStyle(color: textColor.withOpacity(0.7)),
+            ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('ОТМЕНА', style: TextStyle(color: Colors.black)),
+            child: Text(
+              'ОТМЕНА',
+              style: TextStyle(color: textColor),
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -315,7 +358,10 @@ class _PlugSettingsState extends State<PlugSettings> {
               _sendDeviceUpdate();
               Navigator.pop(context);
             },
-            child: const Text('СОХРАНИТЬ', style: TextStyle(color: Colors.white)),
+            child: const Text(
+              'СОХРАНИТЬ',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
@@ -345,30 +391,37 @@ class _ScheduleOption extends StatelessWidget {
   final String label;
   final bool isActive;
   final VoidCallback onPressed;
+  final bool isDarkTheme;
 
   const _ScheduleOption({
     required this.label,
     required this.isActive,
     required this.onPressed,
+    required this.isDarkTheme,
   });
 
   @override
   Widget build(BuildContext context) {
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+    final backgroundColor = isDarkTheme ? Palete.darkSurface : Palete.lightSurface;
+
     return ChoiceChip(
-      label: Text(label),
+      label: Text(
+        label,
+        style: TextStyle(
+          color: isActive ? Palete.primary : textColor,
+        ),
+      ),
       selected: isActive,
       onSelected: (selected) => onPressed(),
       selectedColor: Palete.primary.withOpacity(0.2),
-      labelStyle: TextStyle(
-        color: isActive ? Palete.primary : Colors.black, // Черный текст для неактивных
-      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(
-          color: isActive ? Palete.primary : Colors.grey.shade400,
+          color: isActive ? Palete.primary : (isDarkTheme ? Colors.grey.shade600 : Colors.grey.shade400),
         ),
       ),
-      backgroundColor: Colors.white, // Белый фон чипа
+      backgroundColor: backgroundColor,
     );
   }
 }

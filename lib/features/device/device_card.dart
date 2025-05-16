@@ -1,4 +1,3 @@
-// features/device/device_card.dart
 import 'package:flutter/material.dart';
 import 'package:testik2/core/theme/app_icons.dart';
 import 'package:testik2/core/theme/colors.dart';
@@ -20,8 +19,14 @@ class DeviceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDarkTheme ? Palete.darkSurface : Palete.lightSurface;
+    final textColor = isDarkTheme ? Palete.darkText : Palete.lightText;
+
     return Card(
-      color: device.isOn ? Palete.primary.withOpacity(0.2) : Palete.darkSurface,
+      color: device.isOn
+          ? Palete.primary.withOpacity(0.2)
+          : backgroundColor,
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -45,9 +50,9 @@ class DeviceCard extends StatelessWidget {
                   Icon(
                     _getDeviceIcon(device.type),
                     size: 32,
-                    color: device.isOn ? Palete.primary : Palete.lightText,
+                    color: device.isOn ? Palete.primary : textColor,
                   ),
-                  _buildStatusIndicator(),
+                  _buildStatusIndicator(isDarkTheme),
                 ],
               ),
               const SizedBox(height: 12),
@@ -55,18 +60,22 @@ class DeviceCard extends StatelessWidget {
                 device.name,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: device.isOn ? Colors.white : Palete.lightText,
+                  color: device.isOn
+                      ? isDarkTheme ? Colors.white : Palete.darkText
+                      : textColor,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 device.room,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: device.isOn ? Colors.white70 : Palete.lightText.withOpacity(0.7),
+                  color: device.isOn
+                      ? isDarkTheme ? Colors.white70 : Palete.darkText.withOpacity(0.7)
+                      : textColor.withOpacity(0.7),
                 ),
               ),
               const Spacer(),
-              _buildDeviceSpecificControls(),
+              _buildDeviceSpecificControls(isDarkTheme, textColor),
             ],
           ),
         ),
@@ -74,19 +83,24 @@ class DeviceCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusIndicator() {
+  Widget _buildStatusIndicator(bool isDarkTheme) {
     return Container(
       width: 12,
       height: 12,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: device.isOn ? Colors.green : Colors.grey,
-        border: Border.all(color: Colors.white24, width: 2),
+        color: device.isOn
+            ? Palete.primary
+            : isDarkTheme ? Colors.grey : Colors.grey[400],
+        border: Border.all(
+          color: isDarkTheme ? Colors.white24 : Colors.black12,
+          width: 2,
+        ),
       ),
     );
   }
 
-  Widget _buildDeviceSpecificControls() {
+  Widget _buildDeviceSpecificControls(bool isDarkTheme, Color textColor) {
     switch (device.type) {
       case DeviceType.light:
         return Column(
@@ -95,7 +109,9 @@ class DeviceCard extends StatelessWidget {
               children: [
                 Icon(
                   Icons.brightness_4,
-                  color: device.isOn ? Palete.primary : Palete.lightText.withOpacity(0.5),
+                  color: device.isOn
+                      ? Palete.primary
+                      : textColor.withOpacity(0.5),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -113,13 +129,15 @@ class DeviceCard extends StatelessWidget {
                     }
                         : null,
                     activeColor: Palete.primary,
-                    inactiveColor: Palete.lightText.withOpacity(0.3),
+                    inactiveColor: textColor.withOpacity(0.3),
                   ),
                 ),
                 Text(
                   '${(device.settings['brightness'] ?? 50).toInt()}%',
                   style: TextStyle(
-                    color: device.isOn ? Palete.primary : Palete.lightText.withOpacity(0.5),
+                    color: device.isOn
+                        ? Palete.primary
+                        : textColor.withOpacity(0.5),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -131,8 +149,8 @@ class DeviceCard extends StatelessWidget {
                 child: Text(
                   'Включите устройство для настройки',
                   style: TextStyle(
-                    color: Palete.lightText.withOpacity(0.5),
-                    fontSize: 8.2,
+                    color: textColor.withOpacity(0.5),
+                    fontSize: 0,
                   ),
                 ),
               ),
@@ -145,7 +163,9 @@ class DeviceCard extends StatelessWidget {
             Text(
               'Температура',
               style: TextStyle(
-                color: device.isOn ? Colors.white70 : Palete.lightText.withOpacity(0.7),
+                color: device.isOn
+                    ? isDarkTheme ? Colors.white70 : Palete.darkText.withOpacity(0.7)
+                    : textColor.withOpacity(0.7),
               ),
             ),
             Text(
@@ -153,7 +173,9 @@ class DeviceCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: device.isOn ? Palete.primary : Palete.lightText,
+                color: device.isOn
+                    ? Palete.primary
+                    : textColor,
               ),
             ),
           ],
